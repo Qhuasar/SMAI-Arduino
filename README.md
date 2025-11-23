@@ -4,10 +4,13 @@ This project involves the development of a microcontroller prototype designed fo
 # Dependencies
 
 - https://github.com/adafruit/DHT-sensor-library
-- 
+- https://remotexy.com/en/
 
 # References
-## DHT22
-Basic example taken from this article https://arduinogetstarted.com/tutorials/arduino-dht22 
+## DHT22 Ambient Sensor
+Basic example taken from this article https://arduinogetstarted.com/tutorials/arduino-dht22
+## HT-05 Bluetooth Module
+### Dable
+X Dabble is not compatible with newer version of Android
 
 This project is released under the terms of the GNU General Public License, Version 3 (GPLv3). This means the source code is free software: you can redistribute it and/or modify it under the terms of the GPLv3. You should have received a copy of the GNU General Public License along with this program. If not, see https://www.gnu.org/licenses/gpl-3.0.html...
