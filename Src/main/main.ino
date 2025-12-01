@@ -1,11 +1,14 @@
 #include "DHT.h"
-#define DHT22_PIN 10
 #include "VirtuinoBluetooth.h"
 #include <SoftwareSerial.h>
 #include <Adafruit_GFX.h>    // Biblioteca Gráfica
 #include <Adafruit_ST7735.h> // Biblioteca do Ecrã TFT
 #include <LiquidCrystal.h>   // Biblioteca do Ecrã LCD
 #include <SPI.h>
+// --- CONFIGURAÇÃO DO DHT22 ---
+// PIN 12 was in confligct with the TFT setup
+#define DHT22_PIN A2
+
 
 // --- CONFIGURAÇÃO DO LCD (VERDE) ---
 // Pinos: RS=7, E=6, D4=5, D5=4, D6=3, D7=2
@@ -17,7 +20,7 @@ LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
 #define TFT_DC     8
 
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
-SoftwareSerial bluetoothSerial = SoftwareSerial(2, 3); // arduino RX pin=2 arduino TX pin=3 connect the arduino RX pin to bluetooth module TX pin - connect the arduino TX pin to bluetooth module RX pin. Disable this line if you want to use hardware serialVirtuinoBluetooth virtuino(bluetoothSerial); // Set SoftwareSerial baud rate. - Disable this line if you want to use hardware serial
+SoftwareSerial bluetoothSerial = SoftwareSerial(A0, A1); // arduino RX pin=2 arduino TX pin=3 connect the arduino RX pin to bluetooth module TX pin - connect the arduino TX pin to bluetooth module RX pin. Disable this line if you want to use hardware serialVirtuinoBluetooth virtuino(bluetoothSerial); // Set SoftwareSerial baud rate. - Disable this line if you want to use hardware serial
 VirtuinoBluetooth virtuino(bluetoothSerial); // Set SoftwareSerial baud rate. - Disable this line if you want to use hardware serial
 DHT dht22(DHT22_PIN, DHT22);
 
@@ -104,7 +107,7 @@ void setup() {
   setup_display();
   bluetoothSerial.begin(9600);  // Enable this line if you want to use software serial (UNO, Nano etc.)
   //Serial1.begin(9600); // Enable this line if you want to use hardware serial (Mega, DUE etc.)
-  virtuino.DEBUG = true;  // set this value TRUE to enable the serial monitor status
+  virtuino.DEBUG = false;  // set this value TRUE to enable the serial monitor status
   dht22.begin();          // initialize the DHT22 sensor
 }
 
@@ -112,4 +115,5 @@ void loop() {
   virtuino.run();               
   read_temprature();
   display_data();
+  virtuino.vDelay(2000);  // use virtuino.delay instead of delay function to allow Virtuino to work properly
 }
