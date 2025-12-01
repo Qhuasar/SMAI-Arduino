@@ -28,6 +28,9 @@ struct DataFormat {
   float temp;
 };
 
+int delay_variable = 2000;
+long last_millis = 0;
+
 struct DataFormat dht22_sensor_data = { 0 };
 
 void display_data(){
@@ -86,6 +89,7 @@ void read_temprature() {
 
 void setup() {
   Serial.begin(9600);
+  last_millis = millis();
   setup_display();
   bluetoothSerial.begin(9600);  // Enable this line if you want to use software serial (UNO, Nano etc.)
   //Serial1.begin(9600); // Enable this line if you want to use hardware serial (Mega, DUE etc.)
@@ -94,8 +98,14 @@ void setup() {
 }
 
 void loop() {
-  virtuino.run();               
-  read_temprature();
-  display_data();
-  virtuino.vDelay(2000);  // use virtuino.delay instead of delay function to allow Virtuino to work properly
+  virtuino.run();
+  delay_variable = virtuino.vMemoryRead(2);
+  if(millis() - last_millis >= delay_variable){
+    read_temprature();
+    display_data();
+    last_millis = millis();
+    Serial.print("Interval: ");
+    Serial.print(delay_variable);
+    Serial.print(" ms\n");                 
+  }
 }
