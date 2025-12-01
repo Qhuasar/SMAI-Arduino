@@ -9,7 +9,6 @@
 // PIN 12 was in confligct with the TFT setup
 #define DHT22_PIN A2
 
-
 // --- CONFIGURAÇÃO DO LCD (VERDE) ---
 // Pinos: RS=7, E=6, D4=5, D5=4, D6=3, D7=2
 LiquidCrystal lcd(7, 6, 5, 4, 3, 2);
@@ -33,52 +32,35 @@ struct DataFormat dht22_sensor_data = { 0 };
 
 void display_data(){
   // --- ATUALIZAR LCD ---
-  lcd.setCursor(0, 1);
-  lcd.print("Tempo: ");
-  lcd.print(millis() / 1000);
-
+  lcd.setCursor(10, 1);
+  lcd.print(dht22_sensor_data.humi);
+  lcd.print("%");
+  lcd.setCursor(6, 0);
+  lcd.print(dht22_sensor_data.temp);
+  lcd.print("C");
   // --- ATUALIZAR TFT ---
-  // Quadrado a piscar no centro
-  int cor = random(0xFFFF); 
-  tft.fillRect(40, 80, 50, 40, cor);
-  
-  tft.setCursor(45, 95);
-  tft.setTextColor(ST7735_BLACK);
+  tft.fillScreen(ST7735_BLACK);
+  tft.setCursor(0, 70);
+  tft.setTextColor(ST7735_WHITE);
   tft.setTextSize(1);
-  tft.print(millis() / 1000);
+  tft.print("Humididty:");
+  tft.println(dht22_sensor_data.humi);
+  tft.println("");
+  tft.print("Temp:");
+  tft.print(dht22_sensor_data.temp);
 }
 
 void setup_display(){
   // --- INICIAR LCD ---
   lcd.begin(16, 2);
-  lcd.print("Teste SMAI");
-
+  lcd.print("Temp: ");
+  lcd.setCursor(0, 1);
+  lcd.print("Humidity: ");
   // --- INICIAR TFT ---
   tft.initR(INITR_BLACKTAB); 
-  
-  // *** AQUI ESTÁ A CORREÇÃO DA ROTAÇÃO ***
-  // 0 = Normal
-  // 1 = Deitado (90 graus)
-  // 2 = Invertido (180 graus) -> Tenta este!
-  // 3 = Deitado Invertido (270 graus)
   tft.setRotation(2); 
-
   // Limpar ecrã
   tft.fillScreen(ST7735_BLACK);
-  
-  // Desenhar moldura Branca
-  tft.drawRect(0, 0, 128, 160, ST7735_WHITE);
-  
-  // Escrever Título
-  tft.setCursor(15, 20);
-  tft.setTextColor(ST7735_CYAN);
-  tft.setTextSize(2); 
-  tft.println("PROJETO");
-  
-  tft.setCursor(35, 45);
-  tft.setTextColor(ST7735_YELLOW);
-  tft.setTextSize(2);
-  tft.println("SMAI");
 }
 
 void read_temprature() {
