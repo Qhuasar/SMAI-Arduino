@@ -5,6 +5,10 @@
 #include <Adafruit_ST7735.h> // Biblioteca do Ecrã TFT
 #include <LiquidCrystal.h>   // Biblioteca do Ecrã LCD
 #include <SPI.h>
+
+#define DELAY_MAX_TIME 15000
+#define DEYLAY_MIN_TIME 2000
+
 // --- CONFIGURAÇÃO DO DHT22 ---
 // PIN 12 was in confligct with the TFT setup
 #define DHT22_PIN A2
@@ -92,7 +96,6 @@ void setup() {
   last_millis = millis();
   setup_display();
   bluetoothSerial.begin(9600);  // Enable this line if you want to use software serial (UNO, Nano etc.)
-  //Serial1.begin(9600); // Enable this line if you want to use hardware serial (Mega, DUE etc.)
   virtuino.DEBUG = false;  // set this value TRUE to enable the serial monitor status
   dht22.begin();          // initialize the DHT22 sensor
 }
@@ -100,6 +103,7 @@ void setup() {
 void loop() {
   virtuino.run();
   delay_variable = virtuino.vMemoryRead(2);
+  delay_variable = constrain(delay_variable, DEYLAY_MIN_TIME, DELAY_MAX_TIME); // constrain the delay between
   if(millis() - last_millis >= delay_variable){
     read_temprature();
     display_data();
